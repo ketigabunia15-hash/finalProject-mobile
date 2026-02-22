@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
-import { useStore } from "../../context/storeContext";
+import { useStore } from '../../context/storeContext';
 
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart } = useStore();
