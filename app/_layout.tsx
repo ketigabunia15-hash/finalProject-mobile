@@ -1,17 +1,13 @@
-import { Stack } from 'expo-router';
-import { useState } from 'react';
+import { Stack } from "expo-router";
+import { StoreProvider } from "../context/StoreContext";
 
 export default function RootLayout() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {!isLoggedIn ? (
+    <StoreProvider>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" />
-      ) : (
         <Stack.Screen name="(tabs)" />
-      )}
-    </Stack>
+      </Stack>
+    </StoreProvider>
   );
 }
-
