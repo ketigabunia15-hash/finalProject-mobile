@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 type User = {
   name: {
@@ -12,6 +13,7 @@ type User = {
 };
 
 export default function Profile() {
+  const navigation = useNavigation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,6 +23,17 @@ export default function Profile() {
       .then(data => setUser(data))
       .finally(() => setLoading(false));
   }, []);
+
+  // Log Out ღილაკის ფუნქცია
+  const handleLogout = () => {
+    // აქ შეგიძლიათ დაასუფთაოთ user state ან token, თუ გაქვთ
+    setUser(null);
+    // გადაჰყავს Login screen-ზე და history წაშლის
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }], // თქვენი Log In screen-ის name
+    });
+  };
 
   if (loading) {
     return (
@@ -54,6 +67,11 @@ export default function Profile() {
         <Text style={styles.label}>Phone</Text>
         <Text>{user.phone}</Text>
       </View>
+
+      {/* Log Out ღილაკი */}
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Log Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -93,10 +111,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     borderRadius: 12,
     padding: 16,
+    marginBottom: 20,
   },
   label: {
     marginTop: 10,
     fontWeight: '600',
     color: '#2437AB',
+  },
+  logoutButton: {
+    backgroundColor: '#BFA150',
+    paddingVertical: 15,
+    paddingHorizontal: 50,
+    borderRadius: 10,
+  },
+  logoutText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
