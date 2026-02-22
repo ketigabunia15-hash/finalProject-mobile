@@ -1,5 +1,5 @@
-import { View, Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
-import { useStore } from '../../context/StoreContext';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useStore } from "../../context/storeContext";
 
 export default function Saved() {
   const { saved } = useStore();
@@ -24,24 +24,24 @@ export default function Saved() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   listContent: {
     padding: 20,
     paddingBottom: 40,
   },
   card: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     padding: 15,
     borderRadius: 12,
     marginBottom: 15,
   },
   title: {
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 5,
   },
   price: {
-    fontWeight: 'bold',
-    color: '#2437AB',
+    fontWeight: "bold",
+    color: "#2437AB",
   },
 });

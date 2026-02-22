@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 type User = {
   name: {
@@ -12,8 +12,12 @@ type User = {
   phone: string;
 };
 
+type RootStackParamList = {
+  Login: undefined;
+};
+
 export default function Profile() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

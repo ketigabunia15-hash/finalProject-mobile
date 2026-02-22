@@ -1,27 +1,35 @@
-import { View, Text, FlatList, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { useStore, Product } from '../../context/StoreContext';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Product, useStore } from "../../context/storeContext";
 
 export default function Cart() {
   const { cart, addToCart, removeFromCart } = useStore();
 
   // პროდუქტის რაოდენობის შეცვლა
   const changeQuantity = (productId: number, delta: number) => {
-  setCart(prev =>
-    prev
-      .map(p =>
-        p.id === productId ? { ...p, quantity: (p.quantity || 1) + delta } : p
+    const updatedCart = cart
+      .map((p: Product) =>
+        p.id === productId ? { ...p, quantity: (p.quantity || 1) + delta } : p,
       )
-      .filter(p => (p.quantity || 0) > 0) // ავტომატურად წაშლის, თუ quantity 0-ზე ნაკლებია
-  );
-};
+      .filter((p: Product) => (p.quantity || 0) > 0); // ავტომატურად წაშლის, თუ quantity 0-ზე ნაკლებია
+
+    updatedCart.forEach((p) => addToCart(p));
+  };
 
   // პროდუქტის წაშლა
   const removeItem = (productId: number) => {
     removeFromCart(productId);
   };
 
-  const total = cart.reduce((sum, p) => sum + (p.price * (p.quantity || 1)), 0);
+  const total = cart.reduce((sum, p) => sum + p.price * (p.quantity || 1), 0);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,14 +46,25 @@ export default function Cart() {
 
               <View style={styles.row}>
                 <TouchableOpacity onPress={() => changeQuantity(item.id, -1)}>
-                  <Ionicons name="remove-circle-outline" size={24} color="#2437AB" />
+                  <Ionicons
+                    name="remove-circle-outline"
+                    size={24}
+                    color="#2437AB"
+                  />
                 </TouchableOpacity>
                 <Text style={styles.qty}>{item.quantity || 1}</Text>
                 <TouchableOpacity onPress={() => changeQuantity(item.id, 1)}>
-                  <Ionicons name="add-circle-outline" size={24} color="#2437AB" />
+                  <Ionicons
+                    name="add-circle-outline"
+                    size={24}
+                    color="#2437AB"
+                  />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => removeItem(item.id)} style={{ marginLeft: 20 }}>
+                <TouchableOpacity
+                  onPress={() => removeItem(item.id)}
+                  style={{ marginLeft: 20 }}
+                >
                   <Ionicons name="trash-outline" size={24} color="red" />
                 </TouchableOpacity>
               </View>
@@ -66,29 +85,29 @@ export default function Cart() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1, backgroundColor: "#fff" },
   listContent: { padding: 20, paddingBottom: 100 },
   card: {
-    flexDirection: 'row',
-    backgroundColor: '#F5F5F5',
+    flexDirection: "row",
+    backgroundColor: "#F5F5F5",
     padding: 10,
     borderRadius: 12,
     marginBottom: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
-  image: { width: 80, height: 80, resizeMode: 'contain', marginRight: 10 },
+  image: { width: 80, height: 80, resizeMode: "contain", marginRight: 10 },
   info: { flex: 1 },
-  title: { fontWeight: '600', marginBottom: 5 },
-  price: { fontWeight: 'bold', color: '#2437AB', marginBottom: 5 },
-  row: { flexDirection: 'row', alignItems: 'center' },
-  qty: { marginHorizontal: 10, fontWeight: 'bold', fontSize: 16 },
-  footer: { marginTop: 20, alignItems: 'center' },
-  total: { fontSize: 18, fontWeight: 'bold', marginBottom: 15 },
+  title: { fontWeight: "600", marginBottom: 5 },
+  price: { fontWeight: "bold", color: "#2437AB", marginBottom: 5 },
+  row: { flexDirection: "row", alignItems: "center" },
+  qty: { marginHorizontal: 10, fontWeight: "bold", fontSize: 16 },
+  footer: { marginTop: 20, alignItems: "center" },
+  total: { fontSize: 18, fontWeight: "bold", marginBottom: 15 },
   payButton: {
-    backgroundColor: '#BFA150',
+    backgroundColor: "#BFA150",
     paddingVertical: 15,
     paddingHorizontal: 50,
     borderRadius: 10,
   },
-  payText: { color: '#fff', fontWeight: 'bold' },
+  payText: { color: "#fff", fontWeight: "bold" },
 });

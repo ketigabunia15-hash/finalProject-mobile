@@ -1,15 +1,15 @@
 import {
-  FlatList,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  View,
   Button,
-} from 'react-native';
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { useEffect, useState } from 'react';
-import { useStore } from '../../context/StoreContext';
+import { useEffect, useState } from "react";
+import { useStore } from "../../context/storeContext";
 
 export default function Products() {
   const [products, setProducts] = useState<any[]>([]);
@@ -18,27 +18,29 @@ export default function Products() {
   const { addToCart, addToSaved } = useStore();
 
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then(r => r.json())
+    fetch("https://fakestoreapi.com/products")
+      .then((r) => r.json())
       .then(setProducts);
   }, []);
 
   if (selectedProduct) {
     return (
       <View style={styles.container}>
-        <Image source={{ uri: selectedProduct.image }} style={styles.detailImage} />
+        <Image
+          source={{ uri: selectedProduct.image }}
+          style={styles.detailImage}
+        />
 
         <Text style={styles.title}>{selectedProduct.title}</Text>
 
-        <Text style={styles.description}>
-          {selectedProduct.description}
-        </Text>
+        <Text style={styles.description}>{selectedProduct.description}</Text>
 
-        <Text style={styles.price}>
-          ${selectedProduct.price}
-        </Text>
+        <Text style={styles.price}>${selectedProduct.price}</Text>
 
-        <Button title="Add to Cart" onPress={() => addToCart(selectedProduct)} />
+        <Button
+          title="Add to Cart"
+          onPress={() => addToCart(selectedProduct)}
+        />
 
         <Button title="Save" onPress={() => addToSaved(selectedProduct)} />
 
@@ -50,7 +52,7 @@ export default function Products() {
   return (
     <FlatList
       data={products}
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={{ padding: 20 }}
       renderItem={({ item }) => (
         <TouchableOpacity
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     padding: 15,
     borderRadius: 12,
     marginBottom: 20,
@@ -98,19 +100,19 @@ const styles = StyleSheet.create({
 
   image: {
     height: 120,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginBottom: 10,
   },
 
   detailImage: {
     height: 200,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginBottom: 20,
   },
 
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
 
@@ -119,23 +121,23 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    color: '#2437AB',
-    fontWeight: 'bold',
+    color: "#2437AB",
+    fontWeight: "bold",
     marginBottom: 10,
   },
 
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
   },
 
   button: {
-    backgroundColor: '#2437AB',
+    backgroundColor: "#2437AB",
     padding: 8,
     borderRadius: 8,
   },
 
   buttonText: {
-    color: '#fff',
+    color: "#fff",
   },
 });

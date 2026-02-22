@@ -8,7 +8,7 @@ export type Product = {
   quantity?: number;
 };
 
-type StoreContextType = {
+type storecontextType = {
   cart: Product[];
   saved: Product[];
   addToCart: (product: Product) => void;
@@ -17,7 +17,7 @@ type StoreContextType = {
   addToSaved: (product: Product) => void;
 };
 
-const StoreContext = createContext<StoreContextType>({
+const StoreContext = createContext<storecontextType>({
   cart: [],
   saved: [],
   addToCart: () => {},
