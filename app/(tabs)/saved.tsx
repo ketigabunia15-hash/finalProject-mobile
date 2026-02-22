@@ -1,8 +1,23 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useStore } from "../../context/storeContext";
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Product, useStore } from "../../context/storeContext";
 
 export default function Saved() {
-  const { saved } = useStore();
+  const { saved, addToCart, removeFromSaved } = useStore();
+
+  // move to cart
+  const moveToCart = (item: Product) => {
+    addToCart(item);           // ვამატებთ cart-ში
+    removeFromSaved(item.id);  // ვშლით saved-დან
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -12,10 +27,40 @@ export default function Saved() {
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.price}>${item.price}</Text>
+            {/* Product Image */}
+            <Image source={{ uri: item.image }} style={styles.image} />
+
+            <View style={styles.info}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.price}>${item.price}</Text>
+
+              <View style={styles.actions}>
+                {/* ❤️ Add back to cart */}
+                <TouchableOpacity
+                  style={styles.cartBtn}
+                  onPress={() => moveToCart(item)}
+                >
+                  <Ionicons name="cart-outline" size={18} color="#fff" />
+                  <Text style={styles.btnText}>Add to cart</Text>
+                </TouchableOpacity>
+
+                {/* 🗑 Remove from saved */}
+                <TouchableOpacity
+                  onPress={() => removeFromSaved(item.id)}
+                >
+                  <Ionicons
+                    name="trash-outline"
+                    size={22}
+                    color="red"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         )}
+        ListEmptyComponent={
+          <Text style={styles.empty}>No saved items yet 🤍</Text>
+        }
       />
     </SafeAreaView>
   );
@@ -31,17 +76,53 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   card: {
+    flexDirection: "row",
     backgroundColor: "#F5F5F5",
-    padding: 15,
+    padding: 12,
     borderRadius: 12,
     marginBottom: 15,
+    alignItems: "center",
+  },
+  image: {
+    width: 70,
+    height: 70,
+    resizeMode: "contain",
+    marginRight: 12,
+  },
+  info: {
+    flex: 1,
   },
   title: {
     fontWeight: "600",
-    marginBottom: 5,
+    marginBottom: 4,
   },
   price: {
     fontWeight: "bold",
     color: "#2437AB",
+    marginBottom: 8,
+  },
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  cartBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#2437AB",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  btnText: {
+    color: "#fff",
+    marginLeft: 6,
+    fontWeight: "600",
+  },
+  empty: {
+    textAlign: "center",
+    marginTop: 50,
+    color: "#999",
   },
 });
+

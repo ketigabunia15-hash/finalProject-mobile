@@ -1,35 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  FlatList,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Product, useStore } from "../../context/storeContext";
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
+import { useStore } from "../../context/storeContext";
 
 export default function Cart() {
-  const { cart, addToCart, removeFromCart } = useStore();
+  const { cart, updateQuantity, removeFromCart } = useStore();
 
-  // პროდუქტის რაოდენობის შეცვლა
-  const changeQuantity = (productId: number, delta: number) => {
-    const updatedCart = cart
-      .map((p: Product) =>
-        p.id === productId ? { ...p, quantity: (p.quantity || 1) + delta } : p,
-      )
-      .filter((p: Product) => (p.quantity || 0) > 0); // ავტომატურად წაშლის, თუ quantity 0-ზე ნაკლებია
-
-    updatedCart.forEach((p) => addToCart(p));
-  };
-
-  // პროდუქტის წაშლა
-  const removeItem = (productId: number) => {
-    removeFromCart(productId);
-  };
-
-  const total = cart.reduce((sum, p) => sum + p.price * (p.quantity || 1), 0);
+  // სულ ჯამი
+  const total = cart.reduce(
+    (sum, p) => sum + p.price * (p.quantity || 1),
+    0
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,21 +19,30 @@ export default function Cart() {
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <View style={styles.card}>
+            {/* პროდუქტის ფოტო */}
             <Image source={{ uri: item.image }} style={styles.image} />
+
+            {/* ინფო */}
             <View style={styles.info}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.price}>${item.price}</Text>
 
+              {/* row: - quantity + 🗑 */}
               <View style={styles.row}>
-                <TouchableOpacity onPress={() => changeQuantity(item.id, -1)}>
+                {/* - quantity */}
+                <TouchableOpacity onPress={() => updateQuantity(item.id, -1)}>
                   <Ionicons
                     name="remove-circle-outline"
                     size={24}
                     color="#2437AB"
                   />
                 </TouchableOpacity>
+
+                {/* quantity */}
                 <Text style={styles.qty}>{item.quantity || 1}</Text>
-                <TouchableOpacity onPress={() => changeQuantity(item.id, 1)}>
+
+                {/* + quantity */}
+                <TouchableOpacity onPress={() => updateQuantity(item.id, 1)}>
                   <Ionicons
                     name="add-circle-outline"
                     size={24}
@@ -61,8 +50,9 @@ export default function Cart() {
                   />
                 </TouchableOpacity>
 
+                {/* 🗑 Remove */}
                 <TouchableOpacity
-                  onPress={() => removeItem(item.id)}
+                  onPress={() => removeFromCart(item.id)}
                   style={{ marginLeft: 20 }}
                 >
                   <Ionicons name="trash-outline" size={24} color="red" />
@@ -74,9 +64,10 @@ export default function Cart() {
         ListFooterComponent={
           <View style={styles.footer}>
             <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
-            <View style={styles.payButton}>
+
+            <TouchableOpacity style={styles.payButton}>
               <Text style={styles.payText}>Proceed to Pay</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         }
       />
