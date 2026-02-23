@@ -1,7 +1,13 @@
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 type User = {
   name: {
@@ -14,7 +20,6 @@ type User = {
 };
 
 export default function Profile() {
-
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +54,6 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
-
       {/* Avatar */}
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>
@@ -64,7 +68,6 @@ export default function Profile() {
 
       {/* User info + logout button */}
       <View style={styles.card}>
-
         <Text style={styles.label}>Username</Text>
         <Text>{user.username}</Text>
 
@@ -75,89 +78,72 @@ export default function Profile() {
         <Text>{user.phone}</Text>
 
         {/* Logout button inside profile info */}
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={handleLogout}
-        >
-          <Text style={styles.logoutText}>
-            Log Out
-          </Text>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
-
       </View>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
   loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff"
   },
 
   container: {
     flex: 1,
-    padding: 25,
+    padding: 20,
     alignItems: "center",
-    backgroundColor: "#fff",
-    justifyContent: "center"
   },
 
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
     backgroundColor: "#2437AB",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 25,
-    elevation: 5
+    marginBottom: 15,
   },
 
   avatarText: {
     color: "#fff",
-    fontSize: 40,
-    fontWeight: "bold"
+    fontSize: 36,
+    fontWeight: "bold",
   },
 
   name: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "700",
-    marginBottom: 25
+    marginBottom: 20,
   },
 
   card: {
     width: "100%",
-    backgroundColor: "#F5F7FB",
-    borderRadius: 18,
-    padding: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3
+    backgroundColor: "#F5F5F5",
+    borderRadius: 12,
+    padding: 16,
   },
 
   label: {
-    marginTop: 12,
+    marginTop: 10,
     fontWeight: "600",
-    color: "#2437AB"
+    color: "#2437AB",
   },
 
   logoutButton: {
-    marginTop: 30,
+    marginTop: 25,
     backgroundColor: "#BFA150",
     paddingVertical: 14,
-    borderRadius: 12
+    borderRadius: 10,
   },
 
   logoutText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "bold"
-  }
-
+    fontWeight: "bold",
+  },
 });
