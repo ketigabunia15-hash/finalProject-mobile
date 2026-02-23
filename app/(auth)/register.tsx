@@ -1,25 +1,54 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+import { authStyles } from "../styles/authStyles";
 
-export default function Register(){
+export default function Register() {
 
-  return(
-    <View style={{flex:1, justifyContent:"center", padding:20}}>
+  return (
+    <View style={authStyles.container}>
 
-      <Text style={{fontSize:26, marginBottom:20}}>Register</Text>
+      <View style={authStyles.card}>
 
-      <TextInput placeholder="Name" style={{borderWidth:1,padding:12,marginBottom:10}}/>
-      <TextInput placeholder="Email" style={{borderWidth:1,padding:12,marginBottom:10}}/>
-      <TextInput placeholder="Password" secureTextEntry style={{borderWidth:1,padding:12}}/>
+        <Text style={authStyles.title}>Register</Text>
 
-      <TouchableOpacity
-        onPress={()=>router.back()}
-        style={{marginTop:20}}
-      >
-        <Text style={{color:"#2437AB", textAlign:"center"}}>
-          ← Back to Login
-        </Text>
-      </TouchableOpacity>
+        <TextInput
+          placeholder="Full Name"
+          style={authStyles.input}
+        />
+
+        <TextInput
+          placeholder="Email"
+          keyboardType="email-address"
+          style={authStyles.input}
+        />
+
+        <TextInput
+          placeholder="Username"
+          style={authStyles.input}
+        />
+
+        <TextInput
+          placeholder="Password"
+          secureTextEntry
+          style={authStyles.input}
+        />
+
+        <TouchableOpacity style={authStyles.button}>
+          <Text style={authStyles.buttonText}>
+            Create Account
+          </Text>
+        </TouchableOpacity>
+
+        {/* Back to Login */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+        >
+          <Text style={authStyles.linkText}>
+            Already have an account? Login
+          </Text>
+        </TouchableOpacity>
+
+      </View>
 
     </View>
   );

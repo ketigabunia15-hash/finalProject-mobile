@@ -95,56 +95,63 @@ const styles = StyleSheet.create({
   loader: {
     flex: 1,
     justifyContent: "center",
-    justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "#fff"
   },
 
   container: {
     flex: 1,
-    padding: 20,
-    alignItems: "center"
+    padding: 25,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    justifyContent: "center"
   },
 
   avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: "#2437AB",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 15
+    marginBottom: 25,
+    elevation: 5
   },
 
   avatarText: {
     color: "#fff",
-    fontSize: 36,
+    fontSize: 40,
     fontWeight: "bold"
   },
 
   name: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "700",
-    marginBottom: 20
+    marginBottom: 25
   },
 
   card: {
     width: "100%",
-    backgroundColor: "#F5F5F5",
-    borderRadius: 12,
-    padding: 16
+    backgroundColor: "#F5F7FB",
+    borderRadius: 18,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3
   },
 
   label: {
-    marginTop: 10,
+    marginTop: 12,
     fontWeight: "600",
     color: "#2437AB"
   },
 
   logoutButton: {
-    marginTop: 25,
+    marginTop: 30,
     backgroundColor: "#BFA150",
     paddingVertical: 14,
-    borderRadius: 10
+    borderRadius: 12
   },
 
   logoutText: {
