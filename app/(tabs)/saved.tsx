@@ -1,22 +1,21 @@
+import { Ionicons } from "@expo/vector-icons";
 import {
   FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
-  View,
-  Image,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Product, useStore } from "../../context/storeContext";
 
 export default function Saved() {
   const { saved, addToCart, removeFromSaved } = useStore();
 
   // move to cart
   const moveToCart = (item: Product) => {
-    addToCart(item);           // ვამატებთ cart-ში
-    removeFromSaved(item.id);  // ვშლით saved-დან
+    addToCart(item); // ვამატებთ cart-ში
+    removeFromSaved(item.id); // ვშლით saved-დან
   };
 
   return (
@@ -45,14 +44,8 @@ export default function Saved() {
                 </TouchableOpacity>
 
                 {/* 🗑 Remove from saved */}
-                <TouchableOpacity
-                  onPress={() => removeFromSaved(item.id)}
-                >
-                  <Ionicons
-                    name="trash-outline"
-                    size={22}
-                    color="red"
-                  />
+                <TouchableOpacity onPress={() => removeFromSaved(item.id)}>
+                  <Ionicons name="trash-outline" size={22} color="red" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -125,4 +118,3 @@ const styles = StyleSheet.create({
     color: "#999",
   },
 });
-

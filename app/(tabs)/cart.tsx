@@ -102,3 +102,4 @@ const styles = StyleSheet.create({
   },
   payText: { color: "#fff", fontWeight: "bold" },
 });
+
