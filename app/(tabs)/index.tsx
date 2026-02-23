@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import { useEffect, useState } from "react";
-import { useStore } from "../../context/storeContext";
+import { useStore } from "../../context/StoreContext";
 
 export default function Products() {
   const [products, setProducts] = useState<any[]>([]);

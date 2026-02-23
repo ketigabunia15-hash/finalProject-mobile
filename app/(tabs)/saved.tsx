@@ -1,3 +1,4 @@
+import { useStore, Product } from "../../context/StoreContext";
 import { Ionicons } from "@expo/vector-icons";
 import {
   FlatList,
