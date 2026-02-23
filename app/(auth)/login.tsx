@@ -2,134 +2,109 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import Checkbox from "expo-checkbox";
+import { useEffect, useState } from "react";
 
 const schema = yup.object({
-  username: yup.string().required("Username required"),
-  password: yup.string().required("Password required"),
+  username: yup.string().required(),
+  password: yup.string().required()
 });
 
 export default function Login() {
 
   const [rememberMe, setRememberMe] = useState(false);
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState:{ errors } } = useForm({
     resolver: yupResolver(schema)
   });
 
-  // ავტო login check
-  useEffect(() => {
+  useEffect(()=>{
     checkAuth();
-  }, []);
+  },[]);
 
-  const checkAuth = async () => {
+  const checkAuth = async()=>{
     const token = await AsyncStorage.getItem("token");
-    if (token) router.replace("/(tabs)");
+    if(token) router.replace("/(tabs)");
   };
 
-  const onSubmit = async (data: any) => {
-    try {
+  const onSubmit = async(data:any)=>{
+
+    try{
 
       const response = await fetch(
         "https://fakestoreapi.com/auth/login",
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: data.username,
-            password: data.password
-          })
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(data)
         }
       );
 
       const result = await response.json();
 
-      if (!response.ok) throw new Error();
+      if(!response.ok) throw new Error();
 
-      // Remember me logic
-      if (rememberMe) {
+      if(rememberMe){
         await AsyncStorage.setItem("token", result.token);
       }
 
       router.replace("/(tabs)");
 
-    } catch {
+    }catch{
       Alert.alert("Login failed");
     }
   };
 
-  return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
+  return(
+    <View style={{flex:1, justifyContent:"center", padding:20}}>
 
-      <Text style={{ fontSize: 26, marginBottom: 25 }}>Login</Text>
+      <Text style={{fontSize:26, marginBottom:20}}>Login</Text>
 
-      {/* Username */}
       <Controller
         control={control}
         name="username"
-        render={({ field: { onChange, value } }) => (
-          <>
-            <TextInput
-              placeholder="Username"
-              value={value}
-              onChangeText={onChange}
-              style={{ borderWidth: 1, padding: 12, marginBottom: 6 }}
-            />
-            {errors.username &&
-              <Text style={{ color: "red" }}>{errors.username.message}</Text>}
-          </>
+        render={({field:{onChange,value}})=>(
+          <TextInput
+            placeholder="Username"
+            value={value}
+            onChangeText={onChange}
+            style={{borderWidth:1,padding:12,marginBottom:10}}
+          />
         )}
       />
 
-      {/* Password */}
       <Controller
         control={control}
         name="password"
-        render={({ field: { onChange, value } }) => (
-          <>
-            <TextInput
-              placeholder="Password"
-              secureTextEntry
-              value={value}
-              onChangeText={onChange}
-              style={{ borderWidth: 1, padding: 12, marginTop: 10 }}
-            />
-            {errors.password &&
-              <Text style={{ color: "red" }}>{errors.password.message}</Text>}
-          </>
+        render={({field:{onChange,value}})=>(
+          <TextInput
+            placeholder="Password"
+            secureTextEntry
+            value={value}
+            onChangeText={onChange}
+            style={{borderWidth:1,padding:12}}
+          />
         )}
       />
 
-      {/* Remember me */}
-      <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 15 }}>
-        <Checkbox value={rememberMe} onValueChange={setRememberMe} />
-        <Text style={{ marginLeft: 8 }}>Remember me</Text>
-      </View>
+      <Checkbox value={rememberMe} onValueChange={setRememberMe}/>
+      <Text>Remember me</Text>
 
-      {/* Login button */}
       <TouchableOpacity
         onPress={handleSubmit(onSubmit)}
-        style={{
-          backgroundColor: "#4A6CF7",
-          padding: 15,
-          borderRadius: 10
-        }}
+        style={{backgroundColor:"#4A6CF7", padding:15, marginTop:20}}
       >
-        <Text style={{ color: "white", textAlign: "center" }}>
-          Login
-        </Text>
+        <Text style={{color:"#fff", textAlign:"center"}}>Login</Text>
       </TouchableOpacity>
 
-      {/* Register suggestion */}
       <TouchableOpacity
-        onPress={() => router.push("/(auth)/register")}
-        style={{ marginTop: 20 }}
+        onPress={()=>router.push("/(auth)/register")}
+        style={{marginTop:20}}
       >
-        <Text style={{ textAlign: "center", color: "#2437AB" }}>
-          Don't have an account? Register
+        <Text style={{textAlign:"center", color:"#2437AB"}}>
+          Register
         </Text>
       </TouchableOpacity>
 

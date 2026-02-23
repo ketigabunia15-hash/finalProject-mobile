@@ -1,5 +1,7 @@
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 type User = {
   name: {
@@ -17,11 +19,23 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/users/3")
-      .then(res => res.json())
-      .then(setUser)
-      .finally(() => setLoading(false));
+    fetchUser();
   }, []);
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch("https://fakestoreapi.com/users/3");
+      const data = await res.json();
+      setUser(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    router.replace("/(auth)/login");
+  };
 
   if (loading) {
     return (
@@ -36,17 +50,21 @@ export default function Profile() {
   return (
     <View style={styles.container}>
 
+      {/* Avatar */}
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>
           {user.name.firstname[0].toUpperCase()}
         </Text>
       </View>
 
+      {/* Name */}
       <Text style={styles.name}>
         {user.name.firstname} {user.name.lastname}
       </Text>
 
+      {/* User info + logout button */}
       <View style={styles.card}>
+
         <Text style={styles.label}>Username</Text>
         <Text>{user.username}</Text>
 
@@ -55,6 +73,17 @@ export default function Profile() {
 
         <Text style={styles.label}>Phone</Text>
         <Text>{user.phone}</Text>
+
+        {/* Logout button inside profile info */}
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={handleLogout}
+        >
+          <Text style={styles.logoutText}>
+            Log Out
+          </Text>
+        </TouchableOpacity>
+
       </View>
 
     </View>
@@ -65,6 +94,7 @@ const styles = StyleSheet.create({
 
   loader: {
     flex: 1,
+    justifyContent: "center",
     justifyContent: "center",
     alignItems: "center"
   },
@@ -108,5 +138,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: "600",
     color: "#2437AB"
+  },
+
+  logoutButton: {
+    marginTop: 25,
+    backgroundColor: "#BFA150",
+    paddingVertical: 14,
+    borderRadius: 10
+  },
+
+  logoutText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold"
   }
+
 });
