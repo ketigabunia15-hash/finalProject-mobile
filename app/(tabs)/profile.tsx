@@ -1,13 +1,8 @@
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { useEffect, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
 
 type User = {
   name: {
@@ -20,8 +15,10 @@ type User = {
 };
 
 export default function Profile() {
+
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [image, setImage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUser();
@@ -34,6 +31,27 @@ export default function Profile() {
       setUser(data);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Gallery open
+  const pickImage = async () => {
+
+    const permission =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      alert("Gallery permission required");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -54,6 +72,7 @@ export default function Profile() {
 
   return (
     <View style={styles.container}>
+
       {/* Avatar */}
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>
@@ -61,13 +80,21 @@ export default function Profile() {
         </Text>
       </View>
 
-      {/* Name */}
+      {/* User Name */}
       <Text style={styles.name}>
         {user.name.firstname} {user.name.lastname}
       </Text>
 
-      {/* User info + logout button */}
+      {/* Photo Button */}
+      <TouchableOpacity style={styles.photoButton} onPress={pickImage}>
+        <Text style={{ color: "#fff", textAlign: "center" }}>
+          Change Profile Photo
+        </Text>
+      </TouchableOpacity>
+
+      {/* Info Card */}
       <View style={styles.card}>
+
         <Text style={styles.label}>Username</Text>
         <Text>{user.username}</Text>
 
@@ -77,27 +104,31 @@ export default function Profile() {
         <Text style={styles.label}>Phone</Text>
         <Text>{user.phone}</Text>
 
-        {/* Logout button inside profile info */}
+        {/* Logout */}
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
+
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
   loader: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
 
   container: {
-    flex: 1,
-    padding: 20,
-    alignItems: "center",
-  },
+  flex: 1,
+  paddingHorizontal: 25,
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#fff",
+},
 
   avatar: {
     width: 90,
@@ -106,44 +137,53 @@ const styles = StyleSheet.create({
     backgroundColor: "#2437AB",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 15
   },
 
   avatarText: {
     color: "#fff",
     fontSize: 36,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
 
   name: {
     fontSize: 20,
     fontWeight: "700",
-    marginBottom: 20,
+    marginBottom: 15
+  },
+
+  photoButton: {
+    backgroundColor: "#2437AB",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    marginBottom: 25
   },
 
   card: {
     width: "100%",
     backgroundColor: "#F5F5F5",
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20
   },
 
   label: {
-    marginTop: 10,
+    marginTop: 12,
     fontWeight: "600",
-    color: "#2437AB",
+    color: "#2437AB"
   },
 
   logoutButton: {
-    marginTop: 25,
+    marginTop: 30,
     backgroundColor: "#BFA150",
     paddingVertical: 14,
-    borderRadius: 10,
+    borderRadius: 10
   },
 
   logoutText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "bold",
-  },
+    fontWeight: "bold"
+  }
+
 });
